@@ -3,7 +3,7 @@
 import chromadb
 import numpy as np
 from sentence_transformers import SentenceTransformer
-from config import CHROMA_DB_PATH, DEVICE
+from config import CHROMA_DB_PATH, DEVICE, EMBEDDING_MODEL_NAME
 from logging_config import logger
 
 # ChromaDB client initialization
@@ -39,4 +39,4 @@ def embed_and_store(df, embedding_model, collection):
 
 # Initialize and load the embedding model
 def load_embedding_model():
-    return SentenceTransformer('all-MiniLM-L6-v2').to(DEVICE)
+    return SentenceTransformer(EMBEDDING_MODEL_NAME).to(DEVICE)
