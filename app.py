@@ -18,8 +18,8 @@ else:
     DEVICE = "cpu"
 # Initialize components
 collection = initialize_chroma_client()
-embedding_model = load_embedding_model(EMBEDDING_MODEL_NAME, DEVICE )
-llm_tokenizer, llm_model = load_llm_models(LLM_MODEL_NAME, DEVICE)
+embedding_model = load_embedding_model()
+llm_tokenizer, llm_model = load_llm_models()
 
 
 # Function to handle PDF processing and queries
