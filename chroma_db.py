@@ -14,6 +14,7 @@ def initialize_chroma_client():
         chroma_client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
         collection = chroma_client.get_or_create_collection(name="financial_data")
         logger.info("ChromaDB client initialized successfully.")
+        return collection
     except Exception as e:
         logger.error(f"Error initializing ChromaDB client: {e}")
         raise e
