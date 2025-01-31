@@ -4,11 +4,12 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from logging_config import logger
 from torch import autocast
+from config import LLM_MODEL_NAME, DEVICE
 
 # Load LLM models
-def load_llm_models(model_name, device):
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
+def load_llm_models():
+    tokenizer = AutoTokenizer.from_pretrained(LLM_MODEL_NAME)
+    model = AutoModelForCausalLM.from_pretrained(LLM_MODEL_NAME, torch_dtype=torch.float16).to(DEVICE)
     return tokenizer, model
 
 # Context preparation
