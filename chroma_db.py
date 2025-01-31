@@ -3,7 +3,7 @@
 import chromadb
 import numpy as np
 from sentence_transformers import SentenceTransformer
-from config import CHROMA_DB_PATH, DEVICE
+from config import CHROMA_DB_PATH, DEVICE, EMBEDDING_MODEL_NAME
 from logging_config import logger
 
 # ChromaDB client initialization
