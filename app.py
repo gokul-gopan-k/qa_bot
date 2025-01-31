@@ -1,17 +1,26 @@
 # app.py: This file will tie everything together, including the Gradio interface.
 
 import gradio as gr
+import torch
 from pdf_processing import extract_page_no, extract_profit_loss_tables
 from qa_processing import load_llm_models, prepare_context, answer_question_batch
 from chroma_db import initialize_chroma_client, embed_and_store, load_embedding_model
-from config import EXAMPLES
+from config import EXAMPLES, LLM_MODEL_NAME, EMBEDDING_MODEL_NAME 
 from logging_config import logger
 from concurrent.futures import ThreadPoolExecutor
 
+# Constants
+if torch.backends.mps.is_available():
+    DEVICE = "mps"
+elif torch.cuda.is_available():
+    DEVICE = "cuda"
+else:
+    DEVICE = "cpu"
 # Initialize components
-initialize_chroma_client()
-embedding_model = load_embedding_model()
-llm_tokenizer, llm_model = load_llm_models("deepseek-ai/deepseek-coder-1.3b-instruct", "cpu")
+collection = initialize_chroma_client()
+embedding_model = load_embedding_model(EMBEDDING_MODEL_NAME, DEVICE )
+llm_tokenizer, llm_model = load_llm_models(LLM_MODEL_NAME, DEVICE)
+
 
 # Function to handle PDF processing and queries
 def process_pdf_and_queries(pdf_file, dropdown_queries, custom_queries):
@@ -64,7 +73,7 @@ def build_gradio_interface():
                 placeholder="e.g., 'What is the net income for Q4 2024?, What is the operating margin for Q3 2024?'",
                 lines=1,
                 interactive=True
-            )
+            ) 
         ],
         outputs=[
             gr.Dataframe(label="Retrieved financial data segments separated by ---", type="pandas", interactive=False),
@@ -77,5 +86,7 @@ def build_gradio_interface():
     )
 
 if __name__ == "__main__":
+    # Initialize necessary components only once at the start
+    initialize_chroma_client()
     iface = build_gradio_interface()
     iface.launch()
